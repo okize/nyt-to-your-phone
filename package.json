@@ -34,6 +34,7 @@
     "extract-text-webpack-plugin": "~1.0.1",
     "html-webpack-plugin": "~2.17.0",
     "imports-loader": "~0.6.5",
+    "is-phone-number": "~1.0.4",
     "jscs": "~3.0.3",
     "jsdom": "~9.1.0",
     "json-loader": "~0.5.4",

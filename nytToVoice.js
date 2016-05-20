@@ -1,6 +1,7 @@
+const _ = require('lodash');
 const request = require('request');
 const moment = require('moment');
-const _ = require('lodash');
+const isPhoneNumber = require('is-phone-number');
 
 // API keys
 const nytKey = process.env.API_KEY_NYT;
@@ -36,15 +37,19 @@ const getMostPopularStory = (results) => {
 };
 
 const nytToVoice = (req, res) => {
+  const phoneNumber = req.body.phone;
+
+  if (!isPhoneNumber(phoneNumber)) {
+    return res.status(500).send(JSON.stringify('Not a valid phone number! (as far as we can tell)'));
+  }
+
   if (!nytKey) {
-    res.status(500).send(JSON.stringify('Missing NYT API key!'));
+    return res.status(500).send(JSON.stringify('Missing NYT API key!'));
   }
 
   if (!twillioKey) {
-    res.status(500).send(JSON.stringify('Missing Twillio API key!'));
+    return res.status(500).send(JSON.stringify('Missing Twillio API key!'));
   }
-
-  // const data = req.body;
 
   request.get({
     url: 'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/health/1',
