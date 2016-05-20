@@ -1,11 +1,16 @@
+/* eslint no-console: 0 */
+
 const _ = require('lodash');
+const twilio = require('twilio');
 const request = require('request');
 const moment = require('moment');
 const isPhoneNumber = require('is-phone-number');
 
 // API keys
-const nytKey = process.env.API_KEY_NYT;
-const twillioKey = process.env.API_KEY_TWILLIO;
+const nytToken = process.env.NYT_TOKEN;
+const twilioId = process.env.TWILIO_SID;
+const twilioToken = process.env.TWILIO_TOKEN;
+const twilioPhoneNumber = process.env.TWILIO_PHONE;
 
 const sortByViews = (arr) => _.orderBy(arr, ['views'], ['desc']);
 
@@ -36,24 +41,36 @@ const getMostPopularStory = (results) => {
   return null;
 };
 
+const sendTextMessage = (phoneNumber, headline) => {
+  const client = twilio(twilioId, twilioToken);
+
+  client.messages.create({
+    to: phoneNumber,
+    from: twilioPhoneNumber,
+    body: headline,
+  }, (err, message) => {
+    console.log(message.sid);
+  });
+};
+
 const nytToVoice = (req, res) => {
   const phoneNumber = req.body.phone;
 
   if (!isPhoneNumber(phoneNumber)) {
-    return res.status(500).send(JSON.stringify('Not a valid phone number! (as far as we can tell)'));
+    return res.status(500).send(JSON.stringify('Not a valid phone number!'));
   }
 
-  if (!nytKey) {
-    return res.status(500).send(JSON.stringify('Missing NYT API key!'));
+  if (!nytToken) {
+    return res.status(500).send(JSON.stringify('Missing New York Times environment variable'));
   }
 
-  if (!twillioKey) {
-    return res.status(500).send(JSON.stringify('Missing Twillio API key!'));
+  if (!twilioId || !twilioToken || !twilioPhoneNumber) {
+    return res.status(500).send(JSON.stringify('Missing Twilio environment variable(s)'));
   }
 
-  request.get({
+  return request.get({
     url: 'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/health/1',
-    qs: { 'api-key': nytKey },
+    qs: { 'api-key': nytToken },
   }, (err, response, body) => {
     const data = JSON.parse(body);
     const mostPopularStory = getMostPopularStory(data.results);
@@ -62,7 +79,9 @@ const nytToVoice = (req, res) => {
       return res.status(500).send(JSON.stringify('No recent popular articles, apparently!'));
     }
 
-    return res.send(JSON.stringify({ data: mostPopularStory }));
+    sendTextMessage(phoneNumber, mostPopularStory.title);
+
+    return res.send(JSON.stringify({ data: 'texting story to phone!' }));
   });
 };
 

@@ -25,7 +25,7 @@ class App extends React.Component {
     }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
-          console.log(data.title);
+          console.log(data);
         });
       } else {
         response.json().then((data) => {
@@ -41,8 +41,13 @@ class App extends React.Component {
     return (
       <div className={styles.app}>
         <h1>New York Times Health... ON YOUR PHONE!</h1>
-        <label for="phoneNumber">Enter phone number:</label>
-        <ReactPhoneInput defaultCountry={'us'} onlyCountries={['us']} id="phoneNumber" ref="phoneNumber" />
+        <label htmlFor="phoneNumber">Enter phone number:</label>
+        <ReactPhoneInput
+          defaultCountry={'us'}
+          onlyCountries={['us']}
+          id="phoneNumber"
+          ref="phoneNumber"
+        />
         <button onClick={this.onClick}>Get NYT news</button>
       </div>
     );
