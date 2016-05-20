@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const nytToVoice = require('./nytToVoice.js');
+const generateTwiml = require('./generateTwiml.js');
 const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -42,6 +43,8 @@ if (isDeveloping) {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   });
 }
+
+app.post('/api/twiml.xml', generateTwiml);
 
 app.post('/api/phone', nytToVoice);
 
