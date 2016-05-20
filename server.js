@@ -31,16 +31,21 @@ if (isDeveloping) {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
-  app.get('*', (req, res) => {
+  app.get('/', (req, res) => {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
 } else {
   app.use(express.static(path.join(__dirname, 'dist')));
-  app.get('*', (req, res) => {
+  app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   });
 }
+
+// reflect input back to client
+app.post('/api/phone', (req, res) => {
+  res.send(JSON.stringify({ phone: req.body.phone }));
+});
 
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {

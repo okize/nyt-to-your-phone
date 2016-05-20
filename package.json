@@ -6,7 +6,7 @@
   "scripts": {
     "build": "NODE_END=production webpack",
     "lint": "eslint --ext .js,.jsx --cache . && echo \"eslint: no lint errors found\" || true",
-    "start": "nodemon server.js",
+    "start": "nodemon --ignore app/ server.js",
     "test": "mocha"
   },
   "dependencies": {
