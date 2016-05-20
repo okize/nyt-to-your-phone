@@ -3,6 +3,7 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const nytToVoice = require('./nytToVoice.js');
 const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -42,10 +43,7 @@ if (isDeveloping) {
   });
 }
 
-// reflect input back to client
-app.post('/api/phone', (req, res) => {
-  res.send(JSON.stringify({ phone: req.body.phone }));
-});
+app.post('/api/phone', nytToVoice);
 
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {

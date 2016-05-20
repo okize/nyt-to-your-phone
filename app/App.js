@@ -12,21 +12,23 @@ class App extends React.Component {
   }
 
   onClick() {
-    const phone = JSON.stringify({phone: this.refs.phoneNumber.value});
+    const phone = JSON.stringify({ phone: this.refs.phoneNumber.value });
     fetch('/api/phone', {
       method: 'POST',
       headers: {
-        'Accept': 'application/json; charset=utf-8',
+        Accept: 'application/json; charset=utf-8',
         'Content-Type': 'application/json; charset=utf-8',
       },
       body: phone,
     }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
-          console.log(data.phone);
+          console.log(data);
         });
       } else {
-        console.error('something has gone terribly wrong');
+        response.json().then((data) => {
+          console.error(data);
+        });
       }
     }).catch((error) => {
       console.error(error);
