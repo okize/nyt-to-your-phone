@@ -1,6 +1,7 @@
 /* eslint no-console: 0 */
 
 import React from 'react';
+import ReactPhoneInput from 'react-phone-input';
 import 'whatwg-fetch';
 import styles from './App.css';
 
@@ -12,7 +13,8 @@ class App extends React.Component {
   }
 
   onClick() {
-    const phone = JSON.stringify({ phone: this.refs.phoneNumber.value });
+    const phone = JSON.stringify({ phone: this.refs.phoneNumber.getValue() });
+
     fetch('/api/phone', {
       method: 'POST',
       headers: {
@@ -23,7 +25,7 @@ class App extends React.Component {
     }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
-          console.log(data);
+          console.log(data.title);
         });
       } else {
         response.json().then((data) => {
@@ -39,7 +41,8 @@ class App extends React.Component {
     return (
       <div className={styles.app}>
         <h1>New York Times Health... ON YOUR PHONE!</h1>
-        <input type="phone" ref="phoneNumber" placeholder="Enter your phone number" />
+        <label for="phoneNumber">Enter phone number:</label>
+        <ReactPhoneInput defaultCountry={'us'} onlyCountries={['us']} id="phoneNumber" ref="phoneNumber" />
         <button onClick={this.onClick}>Get NYT news</button>
       </div>
     );
