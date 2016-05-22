@@ -1,4 +1,4 @@
-/* eslint no-console: 0 */
+/* eslint no-console: 0, new-cap: 0 */
 
 const nytToVoice = require('./nytToVoice.js');
 const generateTwiml = require('./generateTwiml.js');

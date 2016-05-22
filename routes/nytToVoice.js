@@ -41,15 +41,15 @@ const getMostPopularStory = (results) => {
   return null;
 };
 
-const sendTextMessage = (phoneNumber, headline) => {
+const sendVoiceMessage = (phoneNumber) => {
   const client = twilio(twilioId, twilioToken);
 
-  client.messages.create({
+  client.makeCall({
     to: phoneNumber,
     from: twilioPhoneNumber,
-    body: headline,
-  }, (err, message) => {
-    console.log(message.sid);
+    url: 'http://nyt-to-your-phone.herokuapp.com/api/twiml.xml',
+  }, (err, call) => {
+    console.log(call.id);
   });
 };
 
@@ -79,11 +79,13 @@ const nytToVoice = (req, res) => {
       return res.status(500).send(JSON.stringify('No recent popular articles, apparently!'));
     }
 
-    sendTextMessage(phoneNumber, mostPopularStory.title);
+    // set global so that twiml.xml route has access to headline
+    req.app.set('mostPopularStory', mostPopularStory);
 
-    return res.send(JSON.stringify({ data: 'texting story to phone!' }));
+    sendVoiceMessage(phoneNumber, mostPopularStory);
+
+    return res.send(JSON.stringify({ data: `Calling ${phoneNumber}...` }));
   });
 };
 
 module.exports = nytToVoice;
-
