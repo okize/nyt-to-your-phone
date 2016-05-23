@@ -25,7 +25,7 @@ class App extends React.Component {
     }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
-          console.log(data);
+          console.log(data.log);
         });
       } else {
         response.json().then((data) => {

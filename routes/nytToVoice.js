@@ -84,7 +84,7 @@ const nytToVoice = (req, res) => {
 
     sendVoiceMessage(phoneNumber, mostPopularStory);
 
-    return res.send(JSON.stringify({ data: `Calling ${phoneNumber}...` }));
+    return res.send(JSON.stringify({ log: `Calling ${phoneNumber}...`, story: mostPopularStory }));
   });
 };
 
