@@ -1,9 +1,14 @@
 /* eslint no-console: 0 */
 
 import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import ReactPhoneInput from 'react-phone-input';
 import 'whatwg-fetch';
 import styles from './App.css';
+
+const style = {
+  marginTop: 20
+};
 
 class App extends React.Component {
   constructor(props) {
@@ -40,15 +45,24 @@ class App extends React.Component {
   render() {
     return (
       <div className={styles.app}>
-        <h1>New York Times Health... ON YOUR PHONE!</h1>
-        <label htmlFor="phoneNumber">Enter phone number:</label>
-        <ReactPhoneInput
-          defaultCountry={'us'}
-          onlyCountries={['us']}
-          id="phoneNumber"
-          ref="phoneNumber"
-        />
-        <button onClick={this.onClick}>Get NYT news</button>
+        <header>
+          <h1>TelephoNY</h1>
+          <h2>New York Times Health articles delivered to your voicemail</h2>
+        </header>
+        <article>
+          <label htmlFor="phoneNumber">Enter phone number:</label>
+          <ReactPhoneInput
+            defaultCountry={'us'}
+            onlyCountries={['us']}
+            id="phoneNumber"
+            ref="phoneNumber"
+          />
+          <RaisedButton
+            label="Get NYT news!"
+            onClick={this.onClick}
+            style={style}
+          />
+        </article>
       </div>
     );
   }
