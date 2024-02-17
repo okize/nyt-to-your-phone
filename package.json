@@ -66,8 +66,7 @@
     "whatwg-fetch": "~1.0.0"
   },
   "engines": {
-    "node": "5.11.1",
-    "npm": "3.8.6"
+    "node": "20.9.0"
   },
   "repository": {
     "type": "git",
